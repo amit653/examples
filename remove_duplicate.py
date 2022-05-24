@@ -23,3 +23,8 @@ def duplicate(str):
 
 str=input(" string -")
 duplicate(str)
+
+###
+#f = [lambda x, y: x+y]
+#f[0](5,4)
+
