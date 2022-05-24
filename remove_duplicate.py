@@ -15,9 +15,11 @@ def duplicate(str):
             lst.append(i)
             print(i,j)
     print(''.join(lst))
+    
+    ## alternate using list comrehension
+    
+    #print(''.join([ i for i,j in dct.items() ]))
+    print(''.join([ i for i,j in dct.items() if j==1]))
 
-
-
-        
 str=input(" string -")
 duplicate(str)
