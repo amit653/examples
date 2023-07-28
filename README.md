@@ -1,2 +1,1 @@
-# query / Python examples https://github.com/arsho/Hackerrank_Python_Domain_Solutions  https://codefellows.github.io/sea-f2-python-sept14/session05.html
-#version1 added on 15-feb-22
+Python test examples for practice
