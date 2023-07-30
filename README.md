@@ -1,1 +1,1 @@
-Python test examples for practice
+Golang and Python test examples for practice
