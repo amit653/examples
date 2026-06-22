@@ -1,0 +1,60 @@
+//read table  and count frequency of city  its query equivalent is group by city
+package main
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type Rides struct {
+	City string `json:"string"`
+}
+
+var pool *pgxpool.Pool
+
+func main() {
+	var err error
+	pool, err = pgxpool.New(context.Background(), "postgres://postgres:postgres@192.168.29.225:5432/student")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer pool.Close() //fmt.Println(pool)
+	http.HandleFunc("/products", getProducts)
+
+	log.Println("server running ")
+	log.Fatal(http.ListenAndServe(":8080", nil))
+
+}
+
+func getProducts(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("get products")
+	rows, err := pool.Query(context.Background(), "select city from ride")
+	if err != nil {
+		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+	var rides []Rides
+	for rows.Next() {
+		var r Rides
+		rows.Scan(&r.City)
+		rides = append(rides, r)
+	}
+
+	//fmt.Println(rides)
+	//map to count frequency of city
+	counts := make(map[string]int)
+	for _, ct := range rides {
+		counts[ct.City]++
+	}
+	fmt.Println(counts)
+	w.Header().Set("Content-Type", "application/json")
+	//json.NewEncoder(w).Encode(rides)
+	json.NewEncoder(w).Encode(counts)
+}
