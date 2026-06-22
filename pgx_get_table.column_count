@@ -1,5 +1,6 @@
-//read table  and count frequency of city  its query equivalent is group by city
+// read table  and count frequency of city  its query equivalent is group by city
 package main
+
 import (
 	"context"
 	"encoding/json"
@@ -53,8 +54,27 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 	for _, ct := range rides {
 		counts[ct.City]++
 	}
-	fmt.Println(counts)
-	w.Header().Set("Content-Type", "application/json")
+	fmt.Println(counts) //map[Berlin:131072 Delhi:3 Madrid:65536 Paris:131073]
+    // convert map to slice of struct for sorting
+	type result struct {
+		name  string
+		value int
+	}
+	var slc []result
+	for key, val := range counts {
+		slc = append(slc, result{key, val})
+	}
+	fmt.Println(slc) // slice of struct [{Paris 131073} {Madrid 65536} {Delhi 3} {Berlin 131072}]
+	// Step 3: Manual sort (bubble sort style) by descending order of slc.value
+	for i := 0; i < len(slc); i++ {
+		for j := i + 1; j < len(slc); j++ {
+			if slc[j].value > slc[i].value {
+				slc[i], slc[j] = slc[j], slc[i]
+             }
+		}
+	}
+	fmt.Println(slc) //[{Paris 131073} {Berlin 131072} {Madrid 65536} {Delhi 3}]
+    w.Header().Set("Content-Type", "application/json")
 	//json.NewEncoder(w).Encode(rides)
 	json.NewEncoder(w).Encode(counts)
 }
