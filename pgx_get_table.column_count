@@ -19,7 +19,7 @@ var pool *pgxpool.Pool
 
 func main() {
 	var err error
-	pool, err = pgxpool.New(context.Background(), "postgres://postgres:postgres@192.168.29.225:5432/student")
+	pool, err = pgxpool.New(context.Background(), "postgres://postgres:postgres@192.xxx.xx.xxx:5432/student")
 	if err != nil {
 		log.Fatal(err)
 	}
